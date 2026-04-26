@@ -255,7 +255,7 @@
   }
 
   /* ============================================================
-     ESTILOS COMPARTIDOS (aplicados dentro de cada página via selector)
+     ESTILOS COMPARTIDOS (aplicados dentro de cada pagina via selector)
   ============================================================ */
   .product-page {
     font-family: 'DM Sans', sans-serif;
@@ -608,6 +608,60 @@
   }
   .product-page .reveal.visible { opacity: 1; transform: translateY(0); }
 
+  /* PRODUCT SWITCH (nuevo componente) */
+  .product-switch {
+    max-width: 1100px;
+    margin: 40px auto 80px auto;
+    padding: 0 24px;
+  }
+  .product-switch h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+  .switch-grid {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .switch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.25s, border-color 0.25s, background 0.25s;
+    min-width: 220px;
+    flex: 1;
+    max-width: 280px;
+  }
+  .switch-card:hover {
+    transform: translateY(-6px);
+    background: var(--surface2);
+  }
+  .switch-card[data-switch="eboost"]:hover { border-color: #d4ff00; }
+  .switch-card[data-switch="renova"]:hover { border-color: #b56ef5; }
+  .switch-card[data-switch="burn24"]:hover { border-color: #7ed321; }
+  .switch-card h5 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+  .switch-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  #page-eboost .switch-card[data-switch="eboost"] h5 { color: #d4ff00; }
+  #page-renova .switch-card[data-switch="renova"] h5 { color: #b56ef5; }
+  #page-burn24 .switch-card[data-switch="burn24"] h5 { color: #7ed321; }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     #product-nav { height: 50px; }
@@ -623,6 +677,8 @@
     .product-page .badge-strip { padding: 16px 24px; }
     .nav-brand span { display: none; }
     .nav-tab { padding: 0 18px; font-size: 10px; }
+    .switch-grid { flex-direction: column; align-items: center; }
+    .switch-card { max-width: 100%; width: 100%; }
   }
 </style>
 </head>
@@ -868,6 +924,21 @@
 
 <div class="tagline reveal">
   <p>E-Boost: porque tu carrera no solo<br>se gana con libros,<br><span>se gana con energía.</span></p>
+</div>
+
+<!-- Sección de cambio de producto -->
+<div class="product-switch reveal">
+  <h4>Conoce también nuestros otros productos</h4>
+  <div class="switch-grid">
+    <div class="switch-card" data-switch="renova" onclick="switchProduct('renova')">
+      <h5>RENÖVA+</h5>
+      <p>Dosis diaria de juventud · Colágeno + Vitaminas</p>
+    </div>
+    <div class="switch-card" data-switch="burn24" onclick="switchProduct('burn24')">
+      <h5>24BURN</h5>
+      <p>Reduce y activa · Quemador metabólico</p>
+    </div>
+  </div>
 </div>
 
 </div><!-- /page-eboost -->
@@ -1139,6 +1210,21 @@
 
 <div class="tagline reveal">
   <p>RENÖVA+: porque envejecer<br>es inevitable,<br><span>pero cómo lo haces, no lo es.</span></p>
+</div>
+
+<!-- Sección de cambio de producto -->
+<div class="product-switch reveal">
+  <h4>Conoce también nuestros otros productos</h4>
+  <div class="switch-grid">
+    <div class="switch-card" data-switch="eboost" onclick="switchProduct('eboost')">
+      <h5>E-BOOST</h5>
+      <p>Energía, concentración y recuperación total</p>
+    </div>
+    <div class="switch-card" data-switch="burn24" onclick="switchProduct('burn24')">
+      <h5>24BURN</h5>
+      <p>Reduce y activa · Quemador metabólico</p>
+    </div>
+  </div>
 </div>
 
 </div><!-- /page-renova -->
@@ -1518,10 +1604,27 @@
   <p>24BURN: todos los ingredientes trabajando<br>en sinergia para que tu cuerpo<br><span>queme más y rinda mejor todos los días.</span></p>
 </div>
 
+<!-- Sección de cambio de producto -->
+<div class="product-switch reveal">
+  <h4>Conoce también nuestros otros productos</h4>
+  <div class="switch-grid">
+    <div class="switch-card" data-switch="eboost" onclick="switchProduct('eboost')">
+      <h5>E-BOOST</h5>
+      <p>Energía, concentración y recuperación total</p>
+    </div>
+    <div class="switch-card" data-switch="renova" onclick="switchProduct('renova')">
+      <h5>RENÖVA+</h5>
+      <p>Dosis diaria de juventud · Colágeno + Vitaminas</p>
+    </div>
+  </div>
+</div>
+
 </div><!-- /page-burn24 -->
 
 <script>
-  
+  // Variable global para manejar el observer y evitar conflictos
+  let currentObserver = null;
+
   function goHome() {
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.product-page').forEach(p => p.classList.remove('active'));
@@ -1549,15 +1652,25 @@
   function initReveal() {
     const activePage = document.querySelector('.product-page.active');
     if (!activePage) return;
+    
+    // Desconectar observer anterior si existe
+    if (currentObserver) {
+      currentObserver.disconnect();
+    }
+    
     const revealEls = activePage.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(entries => {
+    currentObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+        if (e.isIntersecting) { 
+          e.target.classList.add('visible'); 
+          currentObserver.unobserve(e.target);
+        }
       });
     }, { threshold: 0.08 });
+    
     revealEls.forEach(el => {
       el.classList.remove('visible');
-      observer.observe(el);
+      currentObserver.observe(el);
     });
   }
 
