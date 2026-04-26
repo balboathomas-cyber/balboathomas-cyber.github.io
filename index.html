@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FWP — Guías de Productos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  
+  /* ============================================================
+     HOME - MENU
+  ============================================================ */
+  #page-home {
+    background: #080808;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  #page-home .home-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 80px);
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+    text-align: center;
+    animation: fadeUp 0.8s ease both;
+  }
+  #page-home .home-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    color: #aaa;
+    margin-bottom: 64px;
+    text-align: center;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .home-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    width: 100%;
+    max-width: 1200px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .home-card {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, border-color 0.3s, background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-card:hover {
+    transform: translateY(-8px);
+    background: #181818;
+  }
+  .home-card img {
+    height: 240px;
+    object-fit: contain;
+    margin-bottom: 24px;
+    transition: transform 0.3s;
+  }
+  .home-card:hover img {
+    transform: scale(1.05);
+  }
+  .home-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .home-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #888;
+    line-height: 1.6;
+  }
+  .home-card[data-target="eboost"]:hover { border-color: #d4ff00; }
+  .home-card[data-target="eboost"] h3 { color: #d4ff00; }
+  
+  .home-card[data-target="renova"]:hover { border-color: #b56ef5; }
+  .home-card[data-target="renova"] h3 { color: #b56ef5; }
+  
+  .home-card[data-target="burn24"]:hover { border-color: #7ed321; }
+  .home-card[data-target="burn24"] h3 { color: #7ed321; }
+
+  /* Update .hero to use flex row for image and content */
+  
+  .product-page .hero-content {
+    flex: 1;
+    max-width: 50%;
+    position: relative; z-index: 2;
+  }
+  .product-page .hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; z-index: 2;
+  }
+  .product-page .hero-image img {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  
+  /* Make nav-brand clickable to go home */
+  .nav-brand { cursor: pointer; }
+  .nav-brand:hover { color: #ddd; }
+
+  @media (max-width: 768px) {
+    .home-cards { grid-template-columns: 1fr; }
+    .product-page .hero { flex-direction: column; align-items: flex-start; }
+    .product-page .hero-image { width: 100%; margin-top: 40px; }
+  }
+
+  /* ============================================================
+     NAV DE PRODUCTOS — encima de todo
+  ============================================================ */
+  #product-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: stretch;
+    height: 56px;
+    background: #080808;
+    border-bottom: 1px solid #222;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.7);
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.15em;
+    color: #fff;
+    border-right: 1px solid #222;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .nav-brand span { color: #aaa; font-size: 13px; margin-left: 8px; font-family: 'DM Sans', sans-serif; letter-spacing: 0.05em; font-weight: 300; }
+  .nav-tabs {
+    display: flex;
+    flex: 1;
+  }
+  .nav-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 28px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #555;
+    border-right: 1px solid #222;
+    border-bottom: 3px solid transparent;
+    transition: color 0.25s, border-color 0.25s, background 0.25s;
+    user-select: none;
+    position: relative;
+  }
+  .nav-tab:hover { color: #bbb; background: rgba(255,255,255,0.03); }
+  .nav-tab.active { color: #fff; border-bottom-color: var(--tab-accent); background: rgba(255,255,255,0.04); }
+  .nav-tab .tab-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--tab-accent);
+    opacity: 0.4;
+    transition: opacity 0.25s;
+    flex-shrink: 0;
+  }
+  .nav-tab.active .tab-dot { opacity: 1; box-shadow: 0 0 8px var(--tab-accent); }
+  .nav-tab[data-product="eboost"] { --tab-accent: #d4ff00; }
+  .nav-tab[data-product="renova"] { --tab-accent: #b56ef5; }
+  .nav-tab[data-product="burn24"] { --tab-accent: #7ed321; }
+
+  /* ============================================================
+     PÁGINAS
+  ============================================================ */
+  .product-page { display: none; }
+  .product-page.active { display: block; }
+
+  /* Offset para que el hero no quede bajo el nav */
+  .product-page .hero { padding-top: calc(80px + 56px) !important; }
+
+  /* ============================================================
+     EBOOST — colores y estilos
+  ============================================================ */
+  #page-eboost {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --accent: #d4ff00;
+    --accent2: #00e5ff;
+    --accent3: #ff6b35;
+    --text: #f0f0f0;
+    --muted: #888;
+    --border: #222;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* ============================================================
+     RENOVA — colores y estilos
+  ============================================================ */
+  #page-renova {
+    --bg: #0e0b14;
+    --surface: #15111f;
+    --surface2: #1d1829;
+    --accent: #b56ef5;
+    --accent2: #d4aaff;
+    --accent3: #e8c0ff;
+    --accent-glow: rgba(181,110,245,0.18);
+    --silver: #c8c8d4;
+    --text: #f0eef8;
+    --muted: #8a85a0;
+    --border: #2a2340;
+    --warn: #e07bff;
+    --warn-bg: rgba(224,123,255,0.07);
+    --warn-border: rgba(224,123,255,0.25);
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* ============================================================
+     24BURN — colores y estilos
+  ============================================================ */
+  #page-burn24 {
+    --bg: #060a06;
+    --surface: #0d140d;
+    --surface2: #131d13;
+    --accent: #7ed321;
+    --accent2: #a8e64a;
+    --accent3: #ff9f2e;
+    --text: #f0f5f0;
+    --muted: #7a8f7a;
+    --border: #1a2a1a;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* ============================================================
+     ESTILOS COMPARTIDOS (aplicados dentro de cada página via selector)
+  ============================================================ */
+  .product-page {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  .product-page *, .product-page *::before, .product-page *::after {
+    box-sizing: border-box; margin: 0; padding: 0;
+  }
+
+  /* HERO */
+  .product-page .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: row;
+    justify-content: space-between; align-items: center;
+    padding: 80px 48px;
+    position: relative; overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .product-page .hero::before {
+    content: ''; position: absolute;
+    top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    pointer-events: none;
+  }
+  #page-eboost .hero::before { background: radial-gradient(circle, rgba(212,255,0,0.12) 0%, transparent 70%); }
+  #page-renova .hero::before { background: radial-gradient(circle, rgba(181,110,245,0.14) 0%, transparent 70%); }
+  #page-burn24 .hero::before { background: radial-gradient(circle, rgba(126,211,33,0.10) 0%, transparent 70%); }
+  #page-renova .hero::after {
+    content: ''; position: absolute;
+    bottom: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(181,110,245,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .product-page .hero-tag {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent);
+    display: inline-block; padding: 6px 14px;
+    margin-bottom: 32px; border-radius: 2px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .product-page .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 160px);
+    line-height: 0.92; letter-spacing: 0.02em;
+    color: var(--text); max-width: 900px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .product-page .hero h1 span { color: var(--accent); }
+  .product-page .hero-sub {
+    font-size: 18px; font-weight: 300;
+    color: var(--muted); max-width: 540px;
+    margin-top: 28px; animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .product-page .hero-sub strong { color: var(--text); font-weight: 500; }
+  .product-page .hero-stats {
+    display: flex; gap: 40px; margin-top: 48px;
+    animation: fadeUp 0.8s 0.3s ease both; flex-wrap: wrap;
+  }
+  .product-page .hero-stat { display: flex; flex-direction: column; gap: 4px; }
+  .product-page .hero-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px; line-height: 1; color: var(--accent);
+  }
+  .product-page .hero-stat-label {
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted); margin-top: 4px;
+  }
+  .product-page .hero-scroll {
+    position: absolute; bottom: 40px; left: 48px;
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 12px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .product-page .hero-scroll::before {
+    content: ''; width: 40px; height: 1px;
+    background: var(--muted); display: block;
+  }
+
+  /* SECTIONS */
+  .product-page section {
+    padding: 80px 48px;
+    border-bottom: 1px solid var(--border);
+    max-width: 1100px; margin: 0 auto;
+  }
+  .product-page .section-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; display: block;
+  }
+  .product-page h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1; letter-spacing: 0.02em;
+    margin-bottom: 48px; color: var(--text);
+  }
+  .product-page h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px; letter-spacing: 0.04em;
+    color: var(--text); margin-bottom: 12px;
+  }
+  .product-page .divider {
+    width: 48px; height: 3px;
+    background: var(--accent);
+    margin-bottom: 32px; display: block; border-radius: 2px;
+  }
+  #page-renova .divider {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  /* 24BURN tips-grid override for flex layout (original uses flex not grid) */
+  #page-burn24 .tips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* PILLAR CARDS */
+  .product-page .pillars {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+  }
+  .product-page .pillar {
+    background: var(--surface); padding: 40px 32px;
+    position: relative; overflow: hidden; transition: background 0.3s;
+  }
+  .product-page .pillar:hover { background: var(--surface2); }
+  .product-page .pillar-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px; line-height: 1; color: var(--border);
+    position: absolute; top: 12px; right: 20px;
+    pointer-events: none; transition: color 0.3s;
+  }
+  #page-eboost .pillar:hover .pillar-num { color: #222; }
+  #page-renova .pillar:hover .pillar-num { color: #2e2548; }
+  #page-burn24 .pillar:hover .pillar-num { color: #1f2f1f; }
+  .product-page .pillar-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+  .product-page .pillar h3 { font-size: 26px; margin-bottom: 8px; }
+  .product-page .pillar-role {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px; display: block;
+  }
+  .product-page .pillar p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+  .product-page .pill {
+    display: inline-flex; align-items: center;
+    background: rgba(128,128,0,0.07); border: 1px solid rgba(128,128,0,0.2);
+    color: var(--accent); font-size: 12px; font-weight: 500;
+    padding: 4px 12px; border-radius: 100px; margin-top: 16px;
+  }
+  #page-eboost .pill { background: rgba(212,255,0,0.07); border-color: rgba(212,255,0,0.2); }
+  #page-renova .pill { background: rgba(181,110,245,0.08); border-color: rgba(181,110,245,0.25); }
+  #page-burn24 .pill { background: rgba(126,211,33,0.07); border-color: rgba(126,211,33,0.25); }
+
+  /* INGREDIENT GRID */
+  .product-page .ingredient-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1px; background: var(--border);
+  }
+  .product-page .ingredient-card {
+    background: var(--surface); padding: 32px; transition: background 0.2s;
+  }
+  .product-page .ingredient-card:hover { background: var(--surface2); }
+  .product-page .ingredient-card .ing-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent2);
+    margin-bottom: 10px; display: block;
+  }
+  .product-page .ingredient-card h4 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 24px;
+    color: var(--text); margin-bottom: 10px; letter-spacing: 0.04em;
+  }
+  .product-page .ingredient-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .product-page .benefit-tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 2px; margin: 12px 0 6px;
+  }
+  #page-eboost .benefit-tag {
+    background: rgba(0,229,255,0.08); color: var(--accent2);
+    border: 1px solid rgba(0,229,255,0.2);
+  }
+  #page-renova .benefit-tag {
+    background: rgba(181,110,245,0.08); color: var(--accent2);
+    border: 1px solid rgba(181,110,245,0.2);
+  }
+  #page-burn24 .benefit-tag {
+    background: rgba(126,211,33,0.08); color: var(--accent2);
+    border: 1px solid rgba(126,211,33,0.2);
+  }
+
+  /* PROTOCOL LIST */
+  .product-page .protocol-list {
+    display: flex; flex-direction: column; gap: 1px;
+    background: var(--border); margin-bottom: 32px;
+  }
+  .product-page .protocol-item {
+    background: var(--surface); padding: 28px 32px;
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 24px; align-items: start; transition: background 0.2s;
+  }
+  .product-page .protocol-item:hover { background: var(--surface2); }
+  .product-page .protocol-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent); margin-top: 8px; flex-shrink: 0;
+  }
+  .product-page .protocol-item p { font-size: 15px; color: var(--muted); }
+  .product-page .protocol-item p strong { color: var(--text); font-weight: 600; }
+
+  /* BENEFITS */
+  .product-page .benefit-row {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+  }
+  .product-page .benefit-box {
+    background: var(--surface); padding: 36px 28px;
+    text-align: center; transition: background 0.2s;
+  }
+  .product-page .benefit-box:hover { background: var(--surface2); }
+  .product-page .benefit-box .big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px; line-height: 1; color: var(--accent); display: block;
+  }
+  .product-page .benefit-box p { font-size: 14px; color: var(--muted); margin-top: 8px; }
+  .product-page .benefit-box p strong { color: var(--text); }
+
+  /* MODE BOX */
+  .product-page .mode-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; padding: 40px; margin-bottom: 48px;
+  }
+  .product-page .mode-box p { font-size: 15px; color: var(--muted); margin-bottom: 12px; }
+  .product-page .mode-box p:last-child { margin-bottom: 0; }
+  .product-page .mode-box p strong { color: var(--text); }
+  .product-page .warning {
+    display: flex; align-items: flex-start; gap: 12px;
+    border-radius: 4px; padding: 16px 20px;
+    margin-top: 20px; font-size: 14px;
+  }
+  #page-eboost .warning {
+    background: rgba(255,107,53,0.07); border: 1px solid rgba(255,107,53,0.2);
+    color: var(--accent3);
+  }
+  #page-eboost .warning::before { content: '⚠'; font-size: 16px; flex-shrink: 0; }
+  #page-renova .warning {
+    background: var(--warn-bg); border: 1px solid var(--warn-border);
+    color: var(--warn);
+  }
+  #page-burn24 .warning {
+    background: rgba(255,159,46,0.07); border: 1px solid rgba(255,159,46,0.2);
+    color: var(--accent3);
+  }
+
+  /* BADGE STRIP (RENOVA) */
+  .product-page .badge-strip {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 20px 48px; display: flex; gap: 32px;
+    align-items: center; overflow-x: auto; flex-wrap: wrap;
+  }
+  .product-page .badge {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--silver); white-space: nowrap;
+  }
+  .product-page .badge-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+
+  /* DESC BLOCK (RENOVA) */
+  .product-page .desc-block {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px; padding: 40px; margin-bottom: 32px;
+  }
+  .product-page .desc-block p {
+    font-size: 16px; color: var(--muted); line-height: 1.8; margin-bottom: 16px;
+  }
+  .product-page .desc-block p:last-child { margin-bottom: 0; }
+  .product-page .desc-block p strong { color: var(--text); font-weight: 500; }
+
+  /* TIPS GRID (RENOVA) */
+  .product-page .tips-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1px; background: var(--border); margin-top: 32px;
+  }
+  .product-page .tip-card {
+    background: var(--surface); padding: 28px 32px;
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 20px; align-items: start; transition: background 0.2s;
+  }
+  .product-page .tip-card:hover { background: var(--surface2); }
+  .product-page .tip-icon { font-size: 24px; flex-shrink: 0; }
+  .product-page .tip-card h5 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 20px;
+    color: var(--accent); letter-spacing: 0.04em; margin-bottom: 6px;
+  }
+  .product-page .tip-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .product-page .tip-card p strong { color: var(--text); }
+
+  /* PRECAUTION LIST (RENOVA) */
+  .product-page .precaution-list {
+    display: flex; flex-direction: column; gap: 1px; background: var(--border);
+  }
+  .product-page .precaution-item {
+    background: var(--surface); padding: 24px 32px;
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 20px; align-items: start; transition: background 0.2s;
+  }
+  .product-page .precaution-item:hover { background: var(--surface2); }
+  .product-page .prec-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent); margin-top: 8px; flex-shrink: 0;
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+  .product-page .precaution-item p { font-size: 15px; color: var(--muted); }
+  .product-page .precaution-item p strong { color: var(--text); font-weight: 600; }
+
+  /* TAGLINE */
+  .product-page .tagline {
+    text-align: center; padding: 100px 48px;
+    position: relative; overflow: hidden;
+  }
+  .product-page .tagline p {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 64px);
+    letter-spacing: 0.04em; color: var(--muted); line-height: 1.2;
+  }
+  .product-page .tagline p span { color: var(--accent); }
+  #page-renova .tagline::before {
+    content: ''; position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(181,110,245,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* HERO CONTENT (RENOVA) */
+  .product-page .hero-content { position: relative; z-index: 2; max-width: 52%; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .product-page .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .product-page .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    #product-nav { height: 50px; }
+    .product-page .hero { padding: 60px 24px !important; padding-top: calc(60px + 50px) !important; }
+    .product-page section { padding: 60px 24px; }
+    .product-page .pillars,
+    .product-page .ingredient-grid,
+    .product-page .benefit-row,
+    .product-page .tips-grid { grid-template-columns: 1fr; }
+    .product-page h2 { font-size: 48px; }
+    .product-page .hero-stats { flex-wrap: wrap; gap: 24px; }
+    .product-page .hero-content { max-width: 100%; }
+    .product-page .badge-strip { padding: 16px 24px; }
+    .nav-brand span { display: none; }
+    .nav-tab { padding: 0 18px; font-size: 10px; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#080808;">
+
+<!-- ====== NAV GLOBAL ====== -->
+<nav id="product-nav">
+  <div class="nav-brand" onclick="goHome()">FWP <span>Guías de Productos</span></div>
+  <div class="nav-tabs">
+    <div class="nav-tab" data-product="eboost" onclick="switchProduct('eboost')">
+      <span class="tab-dot"></span>E-BOOST
+    </div>
+    <div class="nav-tab" data-product="renova" onclick="switchProduct('renova')">
+      <span class="tab-dot"></span>RENÖVA+
+    </div>
+    <div class="nav-tab" data-product="burn24" onclick="switchProduct('burn24')">
+      <span class="tab-dot"></span>24BURN
+    </div>
+  </div>
+</nav>
+
+
+<!-- ====================================================
+     HOME PAGE
+===================================================== -->
+<div id="page-home" class="product-page active">
+  <h1 class="home-title">Bienvenido a FWP</h1>
+  <p class="home-subtitle">Selecciona un producto para ver su guía completa</p>
+  <div class="home-cards">
+    <div class="home-card" data-target="eboost" onclick="switchProduct('eboost')">
+      <img src="assets/eboost.png" alt="E-BOOST">
+      <h3>E-BOOST</h3>
+      <p>Energía, Concentración y Recuperación Total. Suplemento de Alto Rendimiento.</p>
+    </div>
+    <div class="home-card" data-target="renova" onclick="switchProduct('renova')">
+      <img src="assets/renova.png" alt="RENÖVA+">
+      <h3>RENÖVA+</h3>
+      <p>Dosis Diaria de Juventud. Fórmula Antiedad de Alto Impacto con colágeno y vitaminas.</p>
+    </div>
+    <div class="home-card" data-target="burn24" onclick="switchProduct('burn24')">
+      <img src="assets/burn24.png" alt="24BURN">
+      <h3>24BURN</h3>
+      <p>Reduce y Activa Todos los Días. Guía Completa de Ingredientes y Consumo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================================
+     PÁGINA 1: E-BOOST
+===================================================== -->
+<div id="page-eboost" class="product-page">
+
+<div class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">⚡ Suplemento de Alto Rendimiento</span>
+    <h1>E-<span>BOOST</span></h1>
+    <p class="hero-sub">
+      <strong>Energía, Concentración y Recuperación Total.</strong><br>
+      Estudiar a alto nivel es una demanda física y mental agotadora. E-Boost no es una bebida azucarada; es ciencia aplicada para que tu cuerpo y tu cerebro no se "apaguen" cuando más los necesitas.
+    </p>
+  </div>
+  <div class="hero-image">
+    <img src="assets/eboost.png" alt="E-BOOST">
+  </div>
+  <div class="hero-scroll">Desplaza para descubrir</div>
+</div>
+
+<section class="reveal">
+  <span class="section-label">Tu sistema de energía</span>
+  <h2>¿Cómo hackeamos<br>tu fatiga?</h2>
+  <span class="divider"></span>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="pillar-num">1</span>
+      <span class="pillar-icon">🔋</span>
+      <h3>LEUCINA</h3>
+      <span class="pillar-role">Tu "Batería Externa"</span>
+      <p>Muchos estudiantes no saben que menos músculo significa menos energía mental. El estrés de los certámenes y las malas noches consumen tu masa muscular, y ahí es cuando aparece la dependencia al café.</p>
+      <p style="margin-top:12px;">La Leucina protege tu músculo para que funcione como un generador de energía constante. Adiós a la sensación de "cuerpo pesado", los bostezos en clases tediosas y la neblina mental.</p>
+      <span class="pill">Contra el agotamiento</span>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">2</span>
+      <span class="pillar-icon">⛽</span>
+      <h3>ISOLEUCINA</h3>
+      <span class="pillar-role">Optimizador de Combustible</span>
+      <p>Tu cerebro vive de glucosa, pero si tus músculos no la procesan bien, tienes "picos y bajones" de sueño.</p>
+      <p style="margin-top:12px;">Hace que tus músculos capten mejor el azúcar en sangre. Es como si tu cuerpo aprendiera a usar mejor la bencina: gastas menos para hacer más. Energía estable durante jornadas extensas.</p>
+      <span class="pill">Glucosa optimizada</span>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">3</span>
+      <span class="pillar-icon">🛡</span>
+      <h3>VALINA</h3>
+      <span class="pillar-role">El "Portero" de tu Cerebro</span>
+      <p>Cuando estudias mucho, tu cerebro produce triptófano (serotonina) que te dice: <em>"¡Duérmete, ya basta!"</em>. Eso se llama Fatiga Central.</p>
+      <p style="margin-top:12px;">La Valina compite con el triptófano para entrar al cerebro. Mantienes las "luces encendidas" y la mente alerta por más tiempo, retrasando la señal de sueño.</p>
+      <span class="pill">Bloquea la fatiga mental</span>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingredientes activos</span>
+  <h2>Motor botánico<br>y funcional</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">Enfoque sostenido</span>
+      <h4>Yerba Mate</h4>
+      <p>La yerba mate no es solo un estimulante; es un optimizador mental gracias a su mezcla de <strong style="color:var(--text)">cafeína, teobromina y antioxidantes</strong>.</p>
+      <span class="benefit-tag">En el estudio</span>
+      <p>Aumenta la velocidad de procesamiento de información y mejora la memoria de trabajo.</p>
+      <span class="benefit-tag">La diferencia</span>
+      <p>A diferencia del café, su liberación de energía es gradual. Esto evita el "jitteriness" y te permite mantener un <strong style="color:var(--text)">estado de alerta calma</strong> durante sesiones de lectura profunda.</p>
+      <span class="benefit-tag">Efecto físico</span>
+      <p>Combate la fatiga muscular que surge tras pasar muchas horas en la misma postura frente al computador.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Claridad intestino-cerebro</span>
+      <h4>Fibra de Bambú</h4>
+      <p>La ciencia ha demostrado que un sistema digestivo inflamado "nubla" la mente. La fibra de bambú es el regulador clave aquí.</p>
+      <span class="benefit-tag">En el estudio</span>
+      <p>Evita la <strong style="color:var(--text)">somnolencia post-prandial</strong>. Al ralentizar la absorción de azúcares, mantiene tu glucosa estable y la mente clara y sin "neblina mental".</p>
+      <span class="benefit-tag">La diferencia</span>
+      <p>Mejora la absorción de micronutrientes esenciales para las neuronas, asegurando que tu cerebro reciba el combustible que necesita sin gastar energía extra en una digestión pesada.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Energía de larga duración</span>
+      <h4>Algarrobo</h4>
+      <p>El algarrobo actúa como un <strong style="color:var(--text)">carbohidrato de liberación lenta</strong>, proporcionando un flujo constante de energía al sistema nervioso central.</p>
+      <span class="benefit-tag">En el estudio</span>
+      <p>Previene los "crashes" o bajones de azúcar que causan irritabilidad y falta de paciencia al resolver problemas complejos.</p>
+      <span class="benefit-tag">La diferencia</span>
+      <p>Sus antioxidantes protegen a las neuronas del estrés oxidativo que genera el <strong style="color:var(--text)">estrés académico</strong>. Es el soporte perfecto para evitar el agotamiento de mitad de jornada.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Foco + resistencia</span>
+      <h4>Té Negro + Guaraná</h4>
+      <p>Si sientes que el día no te alcanza o que el cerebro se te "nubla" después de un par de horas de lectura, esta combinación es tu mejor aliada.</p>
+      <span class="benefit-tag">Té Negro</span>
+      <p>No es solo energía; es <strong style="color:var(--text)">enfoque inteligente</strong>. Gracias a la L-teanina, te mantiene despierto pero tranquilo. Ideal si los exámenes te dan ansiedad.</p>
+      <span class="benefit-tag">Guaraná</span>
+      <p>Es como una batería de <strong style="color:var(--text)">larga duración</strong> para tu cerebro. A diferencia del café, libera la energía poco a poco. Te ayuda a pensar más rápido y a estar más motivado.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Micronutrientes</span>
+  <h2>La base<br>científica</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">Máxima Agilidad Mental</span>
+      <h4>Complejo B</h4>
+      <p>Estas vitaminas son el combustible de tu cerebro.</p>
+      <span class="benefit-tag">Enfoque y Memoria</span>
+      <p>Las B6, B9 y B12 son críticas para crear neurotransmisores, los mensajeros químicos que te permiten conectar ideas rápidamente.</p>
+      <span class="benefit-tag">Adiós al "Burnout"</span>
+      <p>Al optimizar la energía celular, reducen esa sensación de pesadez mental tras horas de estudio intenso.</p>
+      <span class="benefit-tag">Energía Sostenida</span>
+      <p>La Biotina y el resto del grupo B transforman lo que comes en energía real para que tu cerebro no se "apague" a mitad de la tarde.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Estabilidad y Resistencia</span>
+      <h4>Minerales</h4>
+      <span class="benefit-tag">Magnesio — tu aliado contra la ansiedad</span>
+      <p>Relaja el sistema nervioso y mejora el sueño, asegurando que lo aprendido se consolide mientras descansas.</p>
+      <span class="benefit-tag">Hierro y Zinc</span>
+      <p>El hierro evita que te sientas agotado físicamente, mientras que el zinc mantiene tu función cognitiva aguda para resolver problemas complejos.</p>
+      <span class="benefit-tag">Yodo</span>
+      <p>Regula tu metabolismo para que mantengas un ritmo de estudio constante sin bajones de energía inesperados.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Protección y Recuperación</span>
+      <h4>Vitaminas A, C, D, E</h4>
+      <span class="benefit-tag">Escudo Inmunológico</span>
+      <p>No hay nada peor que enfermarse en semana de finales. La Vitamina C y D mantienen tus defensas altas.</p>
+      <span class="benefit-tag">Antioxidantes</span>
+      <p>Estudiar bajo presión genera estrés oxidativo; las vitaminas C y E protegen tus neuronas de este desgaste, manteniéndote "fresco" por más tiempo.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Pureza y Absorción</span>
+      <h4>Componentes Naturales</h4>
+      <span class="benefit-tag">Cúrcuma</span>
+      <p>Además de dar color, actúa como un antiinflamatorio suave que ayuda a tu bienestar general.</p>
+      <span class="benefit-tag">Stevia</span>
+      <p>Te da un sabor agradable sin el "choque" de azúcar que causaría sueño o falta de concentración después de consumirlo.</p>
+      <span class="benefit-tag">Ácido Cítrico</span>
+      <p>Asegura que tu cuerpo realmente absorba los minerales, para que nada de la fórmula se desperdicie.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Resultados</span>
+  <h2>Resumen de beneficios<br>para tu carrera</h2>
+  <span class="divider"></span>
+  <div class="benefit-row">
+    <div class="benefit-box">
+      <span class="big-num">40%</span>
+      <p><strong>Mayor Retención</strong><br>Un cerebro sin fatiga memoriza un 40% mejor.</p>
+    </div>
+    <div class="benefit-box">
+      <span class="big-num">↑</span>
+      <p><strong>Recuperación Rápida</strong><br>Te levantas con energía aunque hayas estudiado hasta tarde.</p>
+    </div>
+    <div class="benefit-box">
+      <span class="big-num">∞</span>
+      <p><strong>Foco Prolongado</strong><br>Terminas tus tareas en menos tiempo porque no te distraes por el cansancio.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Guía de uso personalizada</span>
+  <h2>Protocolo de<br>consumo</h2>
+  <span class="divider"></span>
+  <div class="mode-box">
+    <p><strong>Modo de consumo</strong></p>
+    <p>Disolver el contenido de 1 sachet (7 g) en un vaso con 200 ml de agua. Mezclar durante unos segundos hasta lograr una preparación homogénea. Consumir preferentemente en la mañana o antes de actividades que requieran mayor energía y concentración.</p>
+    <p style="margin-top:16px;"><strong>Toma este suplemento acompañado de alimentos</strong>, porque funciona mejor cuando tu cuerpo tiene proteínas y carbohidratos disponibles. Si no comes, tu cuerpo puede usar sus propias reservas de energía y eso aumenta el cansancio.</p>
+    <div class="warning">Aunque no sientas apetito, <strong>no debes saltarte comidas</strong>. Este producto contiene fibra, por lo que puede quitar un poco el hambre.</div>
+  </div>
+  <p class="section-label" style="margin-bottom:12px;">Para cada situación</p>
+  <div class="protocol-list">
+    <div class="protocol-item">
+      <div class="protocol-dot"></div>
+      <p><strong>En días de clases largas/tediosas:</strong> Disuelve una dosis en 500 ml de agua y bébelo a sorbos durante la clase. Mantendrá tu glucosa estable y evitará que "cabecees" de sueño.</p>
+    </div>
+    <div class="protocol-item">
+      <div class="protocol-dot"></div>
+      <p><strong>En maratones de estudio (Boches):</strong> Tómalo al iniciar tu bloque más fuerte. La Valina bloqueará la fatiga mental antes de que aparezca.</p>
+    </div>
+    <div class="protocol-item">
+      <div class="protocol-dot"></div>
+      <p><strong>Para evitar dolores de espalda y cuello:</strong> Los aminoácidos de E-Boost ayudan a la reparación muscular, reduciendo la sensación de cuerpo "molido" al día siguiente.</p>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--muted);margin-top:16px;">💧 <strong style="color:var(--text)">Bebe suficiente agua durante el día</strong> para evitar deshidratación y facilitar la absorción de nutrientes.</p>
+</section>
+
+<div class="tagline reveal">
+  <p>E-Boost: porque tu carrera no solo<br>se gana con libros,<br><span>se gana con energía.</span></p>
+</div>
+
+</div><!-- /page-eboost -->
+
+
+<!-- ====================================================
+     PÁGINA 2: RENÖVA+
+===================================================== -->
+<div id="page-renova" class="product-page">
+
+<div class="hero">
+  <div class="hero-content">
+  <span class="hero-tag">✨ Fórmula Antiedad de Alto Impacto · FWP</span>
+  <h1>RENÖVA<span>+</span></h1>
+  <p class="hero-sub">
+    <strong>Dosis Diaria de Juventud.</strong><br>
+    Tu piel, tus articulaciones y tu cuerpo se van desgastando con el tiempo. RENÖVA+ está hecho para ayudarte a verte y sentirte mejor desde adentro, con colágeno y vitaminas que tu cuerpo realmente puede aprovechar.
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-val">11g</span>
+      <span class="hero-stat-label">Proteína por porción</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-val">0g</span>
+      <span class="hero-stat-label">Azúcar añadida</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-val">315g</span>
+      <span class="hero-stat-label">Neto por envase</span>
+    </div>
+  </div>
+  </div>
+  <div class="hero-image">
+    <img src="assets/renova.png" alt="RENÖVA+">
+  </div>
+  <div class="hero-scroll">Desplaza para descubrir</div>
+</div>
+
+<div class="badge-strip reveal">
+  <div class="badge"><span class="badge-dot"></span>Sin Azúcar</div>
+  <div class="badge"><span class="badge-dot"></span>Sin Gluten</div>
+  <div class="badge"><span class="badge-dot"></span>Sin Lactosa</div>
+  <div class="badge"><span class="badge-dot"></span>HACCP Certificado</div>
+  <div class="badge"><span class="badge-dot"></span>Sabor Berries</div>
+  <div class="badge"><span class="badge-dot"></span>Mg · Zn Incluidos</div>
+</div>
+
+<section class="reveal">
+  <span class="section-label">¿Qué es RENÖVA+?</span>
+  <h2>Un suplemento para<br>verte y sentirte mejor</h2>
+  <span class="divider"></span>
+  <div class="desc-block">
+    <p>RENÖVA+ es un suplemento de colágeno en polvo, creado por <strong>FWP</strong>, pensado para ayudarte a cuidar tu piel, tus articulaciones y tu cuerpo en general. Su fórmula incluye colágeno junto a vitaminas y minerales que trabajan juntos para que notes resultados reales: piel más firme, menos dolores al moverte y mejor bienestar día a día.</p>
+    <p>Lo que lo hace especial es que <strong>no tiene azúcar, gluten ni lactosa</strong>, y se endulza con stevia, una planta natural. Cada porción entrega <strong>11 gramos de proteína de colágeno</strong>, que es justo la cantidad que los estudios muestran como necesaria para ver cambios reales en pocas semanas.</p>
+    <p>Tiene sabor a berries, se mezcla fácil en agua y puedes tomarlo todos los días sin complicaciones. Con el tiempo, se convierte en una de las mejores cosas que puedes hacer <strong>por tu cuerpo desde adentro</strong>.</p>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">¿Cómo funciona?</span>
+  <h2>¿Cómo le hace bien<br>a tu cuerpo?</h2>
+  <span class="divider"></span>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="pillar-num">1</span>
+      <span class="pillar-icon">🧬</span>
+      <h3>COLÁGENO TIPO I</h3>
+      <span class="pillar-role">El "cemento" de tu piel</span>
+      <p>Desde los 25 años, tu cuerpo empieza a producir menos colágeno cada año. Eso es lo que causa las arrugas, la flacidez y que la piel pierda esa firmeza de cuando eras más joven.</p>
+      <p style="margin-top:12px;">El colágeno de RENÖVA+ viene procesado en trozos muy pequeños, lo que hace que tu cuerpo lo absorba mucho mejor que el colágeno común. El resultado: piel más firme, lisa y con mejor color.</p>
+      <span class="pill">Firmeza y elasticidad</span>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">2</span>
+      <span class="pillar-icon">🦴</span>
+      <h3>COLÁGENO TIPO II</h3>
+      <span class="pillar-role">Para tus articulaciones</span>
+      <p>Las rodillas, los hombros, los codos... todos tus huesos tienen cartílago, una "almohadilla" que los protege. Con los años, ese cartílago se va gastando y aparece el dolor al caminar o hacer ejercicio.</p>
+      <p style="margin-top:12px;">Este tipo de colágeno llega directo a las zonas articulares para ayudar a que ese cartílago se regenere, reducir la inflamación y lubricar mejor la articulación.</p>
+      <span class="pill">Movilidad sin dolor</span>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">3</span>
+      <span class="pillar-icon">💪</span>
+      <h3>COLÁGENO TIPO III</h3>
+      <span class="pillar-role">Para músculos y circulación</span>
+      <p>El colágeno tipo III está en tus músculos y en las paredes de tus venas y arterias. Cuando escasea, la recuperación después del ejercicio se hace más lenta y el cuerpo se ve menos tonificado.</p>
+      <p style="margin-top:12px;">RENÖVA+ incluye este tipo de colágeno para que tus músculos mantengan su forma y se recuperen más rápido después del esfuerzo.</p>
+      <span class="pill">Fuerza y recuperación</span>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Lo que tiene adentro</span>
+  <h2>Para qué sirve<br>cada ingrediente</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">El gran aliado del colágeno</span>
+      <h4>Vitamina C</h4>
+      <p>Sin ella, <strong style="color:var(--text)">tu cuerpo no puede fabricar colágeno correctamente</strong>, aunque lo estés tomando. Es como intentar construir una casa sin cemento.</p>
+      <span class="benefit-tag">¿Por qué es tan importante?</span>
+      <p>Activa las sustancias dentro de tu cuerpo que "arman" y le dan forma al colágeno. Sin vitamina C, el colágeno que consumes no se aprovecha bien.</p>
+      <span class="benefit-tag">Protege tu piel del sol y la contaminación</span>
+      <p>Ayuda a neutralizar el daño que el sol, el smog y el estrés le hacen a tu piel todos los días. Resultado: piel más pareja, luminosa y con menos manchas.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Minerales esenciales</span>
+      <h4>Magnesio · Zinc</h4>
+      <p>Estos dos minerales son de los más importantes para que tu cuerpo funcione bien por dentro, y la mayoría de las personas <strong style="color:var(--text)">los consume en cantidades insuficientes</strong>.</p>
+      <span class="benefit-tag">Magnesio — relaja y repara</span>
+      <p>Reduce la inflamación del cuerpo, mejora la calidad del sueño y participa en la formación de proteínas estructurales como el colágeno.</p>
+      <span class="benefit-tag">Zinc — para piel, uñas y cabello</span>
+      <p>Es necesario para que las células encargadas de fabricar colágeno funcionen bien. Si te falta zinc, se nota: la piel se ve opaca, las uñas se quiebran y el cabello se adelgaza.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Hidratación desde adentro</span>
+      <h4>Ácido Hialurónico</h4>
+      <p>Tiene una capacidad increíble: <strong style="color:var(--text)">retiene agua en tu piel y articulaciones</strong>, manteniéndolas hidratadas y con volumen.</p>
+      <span class="benefit-tag">¿Qué hace en tu piel?</span>
+      <p>Viaja hasta las capas más profundas de la piel y la "rellena" de adentro, reduciendo las líneas finas y esa apariencia seca que da cuando la piel pierde agua.</p>
+      <span class="benefit-tag">¿Qué hace en tus articulaciones?</span>
+      <p>Lubrica el espacio entre los huesos para que no haya fricción al moverte. Especialmente útil para las rodillas y caderas.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Para cabello y uñas</span>
+      <h4>Vitamina E · Biotina</h4>
+      <p>Estas dos vitaminas trabajan principalmente en lo que ves: tu piel, tu cabello y tus uñas, dándoles <strong style="color:var(--text)">fuerza, brillo y resistencia</strong>.</p>
+      <span class="benefit-tag">Vitamina E — escudo protector</span>
+      <p>Protege las células de tu piel del daño diario causado por el sol, la contaminación y el estrés. Trabaja junto a la vitamina C para que la piel se mantenga sana y firme por más tiempo.</p>
+      <span class="benefit-tag">Biotina — para cabello y uñas</span>
+      <p>Con uso regular de 4 a 6 semanas, las uñas se rompen menos, el cabello se cae menos y recupera cuerpo y brillo.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">El secreto del vino tinto</span>
+      <h4>Resveratrol</h4>
+      <p>Es uno de los <strong style="color:var(--text)">antioxidantes más potentes que existen en la naturaleza</strong>, presente en la piel de la uva negra.</p>
+      <span class="benefit-tag">Antiedad desde adentro</span>
+      <p>Activa proteínas del cuerpo (llamadas sirtuinas) relacionadas con la longevidad celular. Es como encender el "modo reparación" de tus células, lo que se traduce en piel más luminosa y con menos signos de envejecimiento.</p>
+      <span class="benefit-tag">Potencia el colágeno</span>
+      <p>Al proteger las fibras de colágeno del daño oxidativo, ayuda a que el colágeno dure más y trabaje mejor. Multiplica el efecto de los demás ingredientes de RENÖVA+.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Resumen nutricional</span>
+      <h4>Lo que tiene cada porción</h4>
+      <span class="benefit-tag">Lo bueno que tiene</span>
+      <p>11g de proteína de colágeno · 0g de azúcar · Bajo en grasa · Sin gluten · Sin lactosa · Endulzado con stevia</p>
+      <span class="benefit-tag">Vitaminas y minerales clave</span>
+      <p>Vitamina C · Magnesio · Zinc · Complejo B · Vitaminas A, D, E y K</p>
+      <span class="benefit-tag">Calidad garantizada</span>
+      <p>Certificación de calidad alimentaria · Sin alérgenos comunes · 315g por envase · Sabor berries natural</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Resultados esperados</span>
+  <h2>Lo que RENÖVA+<br>hace por ti</h2>
+  <span class="divider"></span>
+  <div class="benefit-row">
+    <div class="benefit-box">
+      <span class="big-num">4 SEM</span>
+      <p><strong>Primeros Resultados en 4 Semanas</strong><br>Con 1 mes de uso diario ya empiezas a notar firmeza visible, piel más hidratada y textura notablemente más suave.</p>
+    </div>
+    <div class="benefit-box">
+      <span class="big-num">↑</span>
+      <p><strong>Piel · Cabello · Uñas</strong><br>Piel más firme y luminosa, cabello más fuerte y uñas que resisten el quiebre.</p>
+    </div>
+    <div class="benefit-box">
+      <span class="big-num">360°</span>
+      <p><strong>Acción Integral</strong><br>Actúa en piel, articulaciones, músculo, hueso y cabello simultáneamente.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Cómo tomarlo</span>
+  <h2>Cómo preparar<br>y tomar RENÖVA+</h2>
+  <span class="divider"></span>
+  <div class="mode-box">
+    <p><strong>Paso a paso para prepararlo</strong></p>
+    <p>Pon <strong>1 medida del producto (unos 10–11 g)</strong> en un vaso con <strong>200–250 ml de agua fría o a temperatura ambiente</strong>. Revuelve por 20 a 30 segundos hasta que quede bien disuelto, sin grumos.</p>
+    <p style="margin-top:12px;"><strong>Nunca uses agua caliente o tibia.</strong> El calor destruye las vitaminas del producto y el colágeno pierde sus propiedades. Siempre agua fría o natural.</p>
+    <p style="margin-top:12px;"><strong>Tómatelo dentro de los 30 minutos siguientes a prepararlo.</strong> Algunas vitaminas se deterioran al estar expuestas al aire y la luz, así que no lo prepares con anticipación.</p>
+    <p style="margin-top:12px;">☀️ <strong>En la mañana, en ayunas:</strong> opción más recomendada para el colágeno. Con el estómago vacío, tu cuerpo lo absorbe sin competencia de otras proteínas, maximizando su aprovechamiento.</p>
+    <p style="margin-top:8px;">🌙 <strong>Antes de dormir:</strong> también es excelente, especialmente para los beneficios del magnesio. El magnesio favorece la relajación muscular y mejora la calidad del sueño, cuando el cuerpo repara tejidos y fabrica colágeno.</p>
+    <div class="warning">⚠️ <strong>Importante:</strong> Si estás tomando algún medicamento o tienes alguna enfermedad diagnosticada, consulta con tu médico antes de empezar a tomar este suplemento.</div>
+  </div>
+  <p style="font-size:14px;color:var(--muted);margin-top:8px;">💧 <strong style="color:var(--text)">Toma bastante agua durante el día:</strong> Al menos 2 litros. Esto ayuda a que el ácido hialurónico haga su trabajo de hidratación.</p>
+  <p style="font-size:14px;color:var(--muted);margin-top:12px;">🌿 <strong style="color:var(--text)">Usa protector solar:</strong> RENÖVA+ ayuda a generar más colágeno, pero el sol lo destruye. Con protector solar todos los días, los resultados se multiplican.</p>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Para sacarle el máximo</span>
+  <h2>Tips y<br>cosas a tener en cuenta</h2>
+  <span class="divider"></span>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <span class="tip-icon">🌙</span>
+      <div>
+        <h5>Duerme bien</h5>
+        <p>Tu cuerpo fabrica y repara el colágeno principalmente <strong>mientras duermes</strong>. Si duermes menos de 7 horas, los beneficios del suplemento se reducen bastante. Dormir bien no es opcional, es parte del tratamiento.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🚭</span>
+      <div>
+        <h5>Evita el cigarro y el alcohol en exceso</h5>
+        <p>El cigarro daña activamente el colágeno que tu cuerpo tiene. El alcohol en exceso impide que tu cuerpo absorba bien el zinc y la vitamina C, <strong>reduciendo parcialmente los efectos del suplemento</strong>.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🏋️</span>
+      <div>
+        <h5>Haz ejercicio</h5>
+        <p>El ejercicio con resistencia estimula a tu cuerpo a producir más colágeno en músculos y articulaciones. Tomar RENÖVA+ <strong>unos 30 minutos antes de entrenar</strong> es ideal para que los nutrientes lleguen a donde más se necesitan.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🍬</span>
+      <div>
+        <h5>Reduce el azúcar</h5>
+        <p>Cuando comes mucho azúcar, esta se "pega" a las fibras de colágeno y las vuelve rígidas y débiles. <strong>Comer menos dulces y harinas refinadas</strong> potencia los resultados de RENÖVA+ de forma notable.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">☀️</span>
+      <div>
+        <h5>Usa protector solar todos los días</h5>
+        <p>El sol es el principal enemigo del colágeno. La radiación UV lo destruye constantemente. Usar <strong>protector solar a diario, incluso en días nublados</strong>, protege el colágeno que RENÖVA+ ayuda a generar.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">📅</span>
+      <div>
+        <h5>Sé constante — mínimo 8 semanas</h5>
+        <p>Los cambios en la piel y las articulaciones son lentos porque el colágeno tarda en formarse. Toma RENÖVA+ <strong>todos los días por al menos 8 a 12 semanas seguidas</strong>. La paciencia y la constancia son los ingredientes más importantes.</p>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <p class="section-label" style="margin-bottom:16px;">⚠️ Cosas importantes a considerar</p>
+  <div class="precaution-list">
+    <div class="precaution-item">
+      <span class="prec-dot"></span>
+      <p><strong>Embarazo y lactancia:</strong> Si estás embarazada o amamantando, habla primero con tu médico o matrona antes de tomar este suplemento.</p>
+    </div>
+    <div class="precaution-item">
+      <span class="prec-dot"></span>
+      <p><strong>Alergia a proteínas de origen animal:</strong> El colágeno viene de animales (generalmente vacuno). Si tienes alguna alergia a este tipo de proteínas, revisa bien la etiqueta del producto.</p>
+    </div>
+    <div class="precaution-item">
+      <span class="prec-dot"></span>
+      <p><strong>Si estás tomando antibióticos:</strong> El zinc puede interferir con algunos antibióticos. En ese caso, deja pasar al menos 2 horas entre el antibiótico y el suplemento.</p>
+    </div>
+    <div class="precaution-item">
+      <span class="prec-dot"></span>
+      <p><strong>Problemas de riñón:</strong> Si tienes alguna enfermedad renal, consulta con tu médico antes de tomar el suplemento, ya que las proteínas en dosis altas pueden requerir más trabajo del riñón.</p>
+    </div>
+    <div class="precaution-item">
+      <span class="prec-dot"></span>
+      <p><strong>No reemplaza la alimentación:</strong> RENÖVA+ es un complemento, no un sustituto. Comer bien sigue siendo la base. El suplemento potencia eso, pero no lo reemplaza.</p>
+    </div>
+  </div>
+</section>
+
+<div class="tagline reveal">
+  <p>RENÖVA+: porque envejecer<br>es inevitable,<br><span>pero cómo lo haces, no lo es.</span></p>
+</div>
+
+</div><!-- /page-renova -->
+
+<!-- ====================================================
+     PÁGINA 3: 24BURN
+===================================================== -->
+<div id="page-burn24" class="product-page">
+
+<div class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">🍵 Guía Completa de Ingredientes y Consumo</span>
+    <h1>24<span>BURN</span></h1>
+    <p class="hero-sub">
+      <strong>Reduce y Activa Todos los Días.</strong><br>
+      Todo lo que necesitas saber sobre los ingredientes de 24BURN, cómo actúan en tu cuerpo y cómo tomarlo correctamente para obtener los mejores resultados.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-val">🍃</span>
+        <span class="hero-stat-label">Té Verde</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">⚡</span>
+        <span class="hero-stat-label">L-Carnitina</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">🌿</span>
+        <span class="hero-stat-label">Guaraná</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">🌱</span>
+        <span class="hero-stat-label">Ginseng</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-image">
+    <img src="assets/burn24.png" alt="24BURN">
+  </div>
+  <div class="hero-scroll">Desplaza para descubrir</div>
+</div>
+
+<section class="reveal">
+  <span class="section-label">Ingredientes Activos Principales</span>
+  <h2>Los pilares de<br>24BURN</h2>
+  <span class="divider"></span>
+  <div class="pillars">
+    <div class="pillar">
+      <span class="pillar-num">1</span>
+      <span class="pillar-icon">🍃</span>
+      <h3>TÉ VERDE</h3>
+      <span class="pillar-role">Ciencia y Vitalidad en cada gota</span>
+      <p>El extracto de té verde es una fuente concentrada de catequinas, compuestos bioactivos que potencian el metabolismo, protegen el corazón y combaten el envejecimiento celular.</p>
+      <span class="pill">Termogénico + Antioxidante</span>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">2</span>
+      <span class="pillar-icon">⚡</span>
+      <h3>L-CARNITINA</h3>
+      <span class="pillar-role">Transporte de grasa a energía</span>
+      <p>La L-carnitina es un compuesto derivado de aminoácidos que cumple un rol esencial en el metabolismo energético. Sin suficiente L-carnitina, la grasa no puede utilizarse eficientemente como combustible.</p>
+      <span class="pill">Combustión de grasa</span>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">3</span>
+      <span class="pillar-icon">🌿</span>
+      <h3>GUARANÁ</h3>
+      <span class="pillar-role">Energía natural y sostenida</span>
+      <p>Conocido por ser una fuente natural de cafeína, además contiene antioxidantes y compuestos estimulantes suaves. La cafeína se libera lentamente gracias a los taninos, evitando picos bruscos de energía.</p>
+      <span class="pill">Energía prolongada</span>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingrediente #1</span>
+  <h2>Té Verde:<br>Ciencia y Vitalidad</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">Efecto Termogénico</span>
+      <h4>Activación Metabólica</h4>
+      <p>Las catequinas actúan como "protectores metabólicos" al mantener activa por más tiempo la noradrenalina, el botón de arranque de tu cuerpo.</p>
+      <span class="benefit-tag">Modo Quema de Grasa</span>
+      <p>Junto a la cafeína natural, ordena al cuerpo usar las reservas de grasa como combustible principal.</p>
+      <span class="benefit-tag">Gasto Energético</span>
+      <p>Eleva la producción de calor corporal (termogénesis), aumentando el consumo de calorías incluso en reposo.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Función Cognitiva</span>
+      <h4>Energía y Enfoque Mental</h4>
+      <p>Al transformar la grasa en energía, el té verde evita la fatiga mental y mejora la concentración.</p>
+      <span class="benefit-tag">Análoga al celular</span>
+      <p>Es como mantener procesos activos en "segundo plano": tu cuerpo sigue trabajando y consumiendo energía de forma eficiente.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Sistema Cardiovascular</span>
+      <h4>Salud Cardiovascular</h4>
+      <p>El colesterol LDL actúa como un camión que transporta grasa. Si ese camión se oxida, deja residuos que tapan las arterias.</p>
+      <span class="benefit-tag">Protección</span>
+      <p>El té verde evita que el LDL se oxide y se pegue a las paredes de los vasos sanguíneos.</p>
+      <span class="benefit-tag">Circulación</span>
+      <p>Mejora la elasticidad de las arterias, permitiendo que la sangre fluya mejor y el corazón se esfuerce menos.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Protección Celular</span>
+      <h4>Antioxidante Potente</h4>
+      <p>Sus polifenoles actúan como un escudo que neutraliza los radicales libres, reduce la inflamación y preserva la integridad de tus células.</p>
+      <span class="benefit-tag">Vidrio protector</span>
+      <p>Es el "vidrio protector" que asegura que tu organismo dure más tiempo en buen estado.</p>
+      <div class="warning">⚠️ Este producto es un complemento nutricional y no sustituye tratamientos médicos.</div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingrediente #2</span>
+  <h2>L-Carnitina:<br>El Motor de la Grasa</h2>
+  <span class="divider"></span>
+  <div class="mode-box">
+    <p><strong>¿Cómo actúa?</strong></p>
+    <p>La L-carnitina ayuda a llevar la grasa al "motor" de las células para convertirla en energía, permitiendo que el cuerpo la use como combustible, especialmente cuando haces actividades del diario vivir.</p>
+    <p><strong>🚗 La analogía del combustible:</strong> Si la grasa es bencina almacenada, la L-carnitina es el vehículo que transporta el combustible hasta el motor. Sin ese transporte, la energía no se produce de forma eficiente.</p>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-box"><span class="big-num">✅</span><p>Usar la grasa como energía</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p>Mejorar resistencia física</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p>Disminuir fatiga</p></div>
+  </div>
+  <div class="benefit-row" style="margin-top:1px;">
+    <div class="benefit-box"><span class="big-num">✅</span><p>Apoyar recuperación muscular</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p>Optimizar metabolismo energético</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p>Reducción de grasa corporal</p></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingrediente #3</span>
+  <h2>Guaraná:<br>Energía Natural</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">Composición</span>
+      <h4>¿Qué contiene el Guaraná?</h4>
+      <p>• Cafeína natural (en mayor concentración que el café)<br>
+      • Taninos → liberación de cafeína más lenta y sostenida<br>
+      • Polifenoles → antioxidantes que protegen las células<br>
+      • Saponinas → compuestos vegetales con efecto estimulante leve</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Sistema Nervioso</span>
+      <h4>Estimulación del SNC</h4>
+      <p>La cafeína bloquea receptores de adenosina (sustancia que produce sueño).</p>
+      <span class="benefit-tag">Resultados</span>
+      <p>• Mayor estado de alerta<br>• Más concentración<br>• Menor sensación de cansancio</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Rendimiento Físico</span>
+      <h4>Energía Física Aumentada</h4>
+      <p>Estimula la liberación de adrenalina y noradrenalina:</p>
+      <span class="benefit-tag">Efectos</span>
+      <p>• Mejora disposición para la actividad física<br>• Reduce percepción de fatiga<br>• Aumenta resistencia</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Analogía energética</span>
+      <h4>Guaraná vs. Café</h4>
+      <p>Gracias a los taninos, la cafeína se libera lentamente, evita picos bruscos y disminuye el "bajón" posterior.</p>
+      <span class="benefit-tag">☕ vs. 🌿</span>
+      <p>Si el café es como encender una luz intensa de golpe 💡, el guaraná es como usar un regulador que mantiene la luz estable por más tiempo 🔆</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingrediente #4</span>
+  <h2>Kelp:<br>El Alga del Mar</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">Minerales Esenciales</span>
+      <h4>Fuente Natural de Nutrientes</h4>
+      <p>Fuente natural de yodo, magnesio, calcio y potasio. Estos minerales ayudan a regular funciones metabólicas del cuerpo.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Fibra Soluble</span>
+      <h4>Sensación de Saciedad</h4>
+      <p>Contiene alginatos que absorben agua, forman gel espeso y retardan el vaciamiento gástrico.</p>
+      <span class="benefit-tag">Analogía</span>
+      <p>Es como tomar una esponja natural que se expande en el estómago, ayudándote a sentirte satisfecho por más tiempo.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Metabolismo</span>
+      <h4>Apoyo al Metabolismo</h4>
+      <p>Su contenido de yodo contribuye al funcionamiento de la tiroides, que regula la velocidad del metabolismo. Resultado: metabolismo más equilibrado.</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Digestión</span>
+      <h4>Salud Digestiva</h4>
+      <p>La fibra del kelp mejora el tránsito intestinal, favorece una microbiota saludable y ayuda a regular la absorción de nutrientes.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingrediente #5</span>
+  <h2>Panax Ginseng:<br>Adaptógeno Natural</h2>
+  <span class="divider"></span>
+  <div class="mode-box">
+    <p><strong>¿Qué significa que sea adaptógeno?</strong></p>
+    <p>Un adaptógeno actúa como un regulador del estrés: si el cuerpo está muy cansado → ayuda a recuperar energía; si hay sobrecarga mental → mejora concentración; si hay desgaste físico → favorece resistencia. No estimula de forma brusca; ayuda al cuerpo a responder mejor según lo que necesita.</p>
+    <p><strong>📱 Si el cuerpo fuera un celular:</strong> El ginseng ayuda a que la batería dure más, evita que se sobrecaliente y permite que funcione mejor cuando lo usas mucho.</p>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-box"><span class="big-num">🧠</span><p><strong>Energía mental</strong><br>Favorece la función cerebral, mejora concentración y memoria, disminuye la fatiga mental.</p></div>
+    <div class="benefit-box"><span class="big-num">🔋</span><p><strong>Energía sostenida</strong><br>Ayuda a optimizar la producción de energía celular. No produce "picos" bruscos como estimulantes fuertes.</p></div>
+    <div class="benefit-box"><span class="big-num">💪</span><p><strong>Resistencia física</strong><br>Ayuda al cuerpo a tolerar mejor el esfuerzo, disminuye percepción de cansancio y favorece recuperación.</p></div>
+  </div>
+  <div class="benefit-row" style="margin-top:1px;">
+    <div class="benefit-box"><span class="big-num">🛡️</span><p><strong>Control del estrés</strong><br>Ayuda a regular cortisol y mejora la capacidad de adaptación del organismo al estrés crónico.</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p><strong>Combate el cansancio</strong><br>Reduce fatiga física y mental. Mantiene energía estable durante todo el día.</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p><strong>Adaptación</strong><br>Mejor respuesta al estrés diario. Se adapta a lo que tu cuerpo necesita en cada momento.</p></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingrediente #6</span>
+  <h2>Vitaminas B2 y B3:<br>Las Llaves de la Energía</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">Conversión energética</span>
+      <h4>Vitamina B2 (Riboflavina)</h4>
+      <p>La riboflavina participa en los procesos que permiten transformar los alimentos en energía utilizable por el cuerpo. Actúa principalmente como coenzima metabólica.</p>
+      <span class="benefit-tag">Funciones específicas</span>
+      <p>• Contribuye a protección antioxidante celular<br>• Apoya salud de piel y mucosas<br>• Participa en metabolismo del hierro</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Metabolismo general</span>
+      <h4>Vitamina B3 (Niacina)</h4>
+      <p>La niacina es uno de los micronutrientes más versátiles del organismo. Sin estas vitaminas, el cuerpo no puede producir energía de forma eficiente.</p>
+      <span class="benefit-tag">Funciones específicas</span>
+      <p>• Participa en más de 400 reacciones metabólicas<br>• Apoya sistema nervioso<br>• Contribuye a la salud cardiovascular<br>• Favorece la circulación sanguínea</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Fatiga y rendimiento</span>
+      <h4>Reducción de Fatiga</h4>
+      <p>Al mejorar la producción energética:</p>
+      <span class="benefit-tag">Resultados</span>
+      <p>• Disminuye la sensación de cansancio<br>• Mejora el rendimiento físico<br>• Favorece la concentración y función cerebral</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Analogía</span>
+      <h4>Las Llaves del Motor</h4>
+      <p><em>"Las vitaminas B2 y B3 ayudan a convertir lo que comes en energía, permitiendo que tu cuerpo y tu cerebro funcionen mejor y se sientan menos cansados."</em></p>
+      <span class="benefit-tag">🚗 Analogía</span>
+      <p>Si los alimentos son combustible, estas vitaminas son las llaves que encienden el motor para producir energía. Sin ellas, el motor no funciona bien.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingrediente #7</span>
+  <h2>Vitamina A:<br>El Escudo Protector</h2>
+  <span class="divider"></span>
+  <div class="mode-box">
+    <p><strong>¿Qué hace la Vitamina A?</strong></p>
+    <p>Relacionada con la protección celular, el sistema inmune y la salud de tejidos. Se encuentra en alimentos de origen animal como retinol y en vegetales como carotenoides (provitamina A).</p>
+    <p><strong>🛡️ La Vitamina A es como:</strong> Un escudo protector que cuida las células y refuerza las defensas del cuerpo.</p>
+  </div>
+  <div class="benefit-row">
+    <div class="benefit-box"><span class="big-num">🛡️</span><p><strong>Acción antioxidante</strong><br>Células más protegidas y envejecimiento celular más lento.</p></div>
+    <div class="benefit-box"><span class="big-num">🧫</span><p><strong>Sistema inmune</strong><br>Contribuye a la producción y función de células defensivas. Mejora la respuesta frente a infecciones.</p></div>
+    <div class="benefit-box"><span class="big-num">🔄</span><p><strong>Regeneración celular</strong><br>Favorece la renovación de tejidos y apoya la salud de piel, mucosas y órganos internos.</p></div>
+  </div>
+  <div class="benefit-row" style="margin-top:1px;">
+    <div class="benefit-box"><span class="big-num">👁️</span><p><strong>Función visual</strong><br>Esencial para la visión normal. Participa en la adaptación a la oscuridad y contribuye a la salud de la retina.</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p><strong>Piel y tejidos</strong><br>Mantiene piel y tejidos saludables y funcionales. Fortalece las barreras naturales del cuerpo.</p></div>
+    <div class="benefit-box"><span class="big-num">✅</span><p><strong>Defensas naturales</strong><br>Mantiene sanas las barreras naturales del cuerpo (piel y mucosas). Actúa fortaleciendo las defensas naturales.</p></div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Ingredientes de Soporte</span>
+  <h2>Otros ingredientes<br>y su función</h2>
+  <span class="divider"></span>
+  <div class="ingredient-grid">
+    <div class="ingredient-card">
+      <span class="ing-label">Fibra dietaria</span>
+      <h4>🌾 Polidextrosa</h4>
+      <p>Es una fibra soluble de bajo aporte calórico que favorece la salud digestiva.</p>
+      <span class="benefit-tag">Funciones</span>
+      <p>• Mejora el tránsito intestinal<br>• Favorece una microbiota saludable<br>• Retarda la digestión<br>• Prolonga la sensación de saciedad</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Vehículo estabilizador</span>
+      <h4>⚗️ Maltodextrina</h4>
+      <p>Carbohidrato de fácil disolución que se utiliza como vehículo para transportar y estabilizar los ingredientes activos. <strong style="color:var(--text)">No es un ingrediente activo;</strong> ayuda a que el producto funcione correctamente.</p>
+      <span class="benefit-tag">Funciones</span>
+      <p>• Permite que el polvo se mezcle mejor<br>• Facilita la dosificación uniforme<br>• Aporta estabilidad a la fórmula</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Acidulantes naturales</span>
+      <h4>🍋 Ácido Cítrico y Málico</h4>
+      <p>Son ácidos orgánicos presentes naturalmente en frutas que dan el sabor agradable y ayudan a que el producto se mezcle bien.</p>
+      <span class="benefit-tag">Funciones</span>
+      <p>• Mejoran el sabor<br>• Favorecen la disolución en agua<br>• Pueden facilitar la absorción de algunos nutrientes</p>
+    </div>
+    <div class="ingredient-card">
+      <span class="ing-label">Edulcorante + Anticohesivo</span>
+      <h4>🍬 Sucralosa & 🧪 Dióxido de Silicio</h4>
+      <p><strong style="color:var(--text)">Sucralosa:</strong> Endulzante no calórico. No eleva la glucosa en sangre y no contribuye a caries dentales.</p>
+      <span class="benefit-tag">Dióxido de Silicio</span>
+      <p>Compuesto mineral utilizado como antiaglomerante. Evita acumulación de humedad, previene grumos y mantiene el polvo suelto y estable.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Guía de Uso</span>
+  <h2>Cómo consumir<br>24 Burn de FWP</h2>
+  <span class="divider"></span>
+  <div class="mode-box">
+    <p><strong>💧 Forma general de consumo</strong></p>
+    <p>Agregar 1 scoop a ras (15 g) en un vaso o botella. Mezclar con 200–250 ml de agua fría o a temperatura ambiente. Revolver hasta disolver completamente.</p>
+    <p><strong>🌅 En la mañana:</strong> Ayuda a activar el metabolismo durante el día.</p>
+    <p><strong>🏃 30 minutos antes de actividad física:</strong> Favorece el uso de grasa como energía.</p>
+    <p><strong>🍽️ 30 minutos después del almuerzo:</strong> Ayuda a generar saciedad y disminuir antojos de la tarde.</p>
+    <div class="warning">🌙 <strong>Evitar consumir de noche:</strong> Puede afectar el sueño por sus estimulantes naturales.</div>
+  </div>
+  <div class="mode-box">
+    <p><strong>🍎 Importante sobre la alimentación</strong></p>
+    <p>❌ No dejes de comer aunque disminuya el apetito.</p>
+    <p>🔥 El producto ayuda a usar la grasa como energía, pero el cuerpo necesita nutrientes para funcionar correctamente.</p>
+    <p>🥗 Saltarse comidas puede generar fatiga, bajo rendimiento y malestar general.</p>
+    <p style="margin-top:12px;">Úsalo como complemento, no como reemplazo de comidas.</p>
+    <p style="margin-top:12px;"><strong>💧 Hidratación:</strong> Beber suficiente agua durante el día ayuda a mejorar el efecto de la fibra, evitar deshidratación y favorecer el metabolismo de grasas. <strong>Recomendación: al menos 5 vasos de agua al día.</strong></p>
+  </div>
+</section>
+
+<section class="reveal">
+  <span class="section-label">Información Importante</span>
+  <h2>Precauciones y<br>efectos a conocer</h2>
+  <span class="divider"></span>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <span class="tip-icon">⚠️</span>
+      <div>
+        <h5>Posibles molestias iniciales</h5>
+        <p>Si la persona no come o bebe poca agua, podría presentar: dolor de cabeza por falta de hidratación y energía, sensación de debilidad o cansancio, heces más blandas (por efecto de la fibra).</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🔄</span>
+      <div>
+        <h5>Adaptación inicial</h5>
+        <p>Durante los primeros días: algunas personas son más sensibles a la fibra, puede haber mayor frecuencia de deposiciones, puede aumentar la frecuencia de orinar. Estos efectos suelen ser leves y temporales.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🍽️</span>
+      <div>
+        <h5>¿Tomarlo con o sin comida?</h5>
+        <p>Depende de la tolerancia de cada persona: con estómago vacío → efecto más rápido; después de comer → absorción más suave para personas sensibles. Si produce malestar gástrico, preferir después de alimentos.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-icon">🚫</span>
+      <div>
+        <h5>Contraindicaciones</h5>
+        <p>No consumir en caso de: embarazo o lactancia, sensibilidad a la cafeína, problemas cardíacos no controlados, hipertensión no tratada. Consultar a un profesional de salud si existen enfermedades crónicas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="tagline reveal">
+  <p>24BURN: todos los ingredientes trabajando<br>en sinergia para que tu cuerpo<br><span>queme más y rinda mejor todos los días.</span></p>
+</div>
+
+</div><!-- /page-burn24 -->
+
+<script>
+  
+  function goHome() {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.product-page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-home').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setTimeout(initReveal, 50);
+  }
+
+  function switchProduct(product) {
+    // Actualizar tabs
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('[data-product="' + product + '"]').classList.add('active');
+
+    // Mostrar página correcta
+    document.querySelectorAll('.product-page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + product).classList.add('active');
+
+    // Scroll al tope
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // Re-lanzar el observer de reveal para la página activa
+    setTimeout(initReveal, 50);
+  }
+
+  function initReveal() {
+    const activePage = document.querySelector('.product-page.active');
+    if (!activePage) return;
+    const revealEls = activePage.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    revealEls.forEach(el => {
+      el.classList.remove('visible');
+      observer.observe(el);
+    });
+  }
+
+  // Inicializar al cargar
+  initReveal();
+</script>
+</body>
+</html>
